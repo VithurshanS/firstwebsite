@@ -1,8 +1,8 @@
 const express = require('express');
-const mysql = require('mysql2');
 const path = require('path');
+const mysql = require('mysql2');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000; // Use process.env.PORT for Vercel compatibility
 
 // Serve static files from the 'vithu' directory
 app.use(express.static(path.join(__dirname, 'vithu')));
@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'vithu/bulbonoff.html'));
 });
 
-// Route to get courses data
+// Other routes for your data
 app.get('/co', (req, res) => {
     db.query('SELECT * FROM course', (err, results) => {
         if (err) {
@@ -41,12 +41,14 @@ app.get('/co', (req, res) => {
     });
 });
 
-app.get('/instructors', (reqi,resk) => {
-    db.query('SELECT * FROM instructor', (err, resu) => {
-        if(err){
+app.get('/instructors', (req, res) => {
+    db.query('SELECT * FROM instructor', (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err.stack);
+            res.status(500).send('Error fetching instructors');
             return;
         }
-        resk.json(resu);
+        res.json(results);
     });
 });
 
