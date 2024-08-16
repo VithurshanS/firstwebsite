@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses Table</title>
+</head>
+<body>
+    <h1>Courses</h1>
+    <table id="coursetable">
+        <thead>
+            <tr>
+                <th>Course ID</th>
+                <th>Title</th>
+                <th>Department Name</th>
+                <th>Credits</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data rows will be inserted here -->
+        </tbody>
+    </table>
+    <h1>Instructor</h1>
+    <table id="instr">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>name</th>
+                <th>Department Name</th>
+                <th>salary</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data rows will be inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/co')
+                .then(respons => respons.json())
+                .then(cou => {
+                    const courseTableBody = document.querySelector('#coursetable tbody');
+                    cou.forEach(cours => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${cours.course_id}</td>
+                            <td>${cours.title}</td>
+                            <td>${cours.dept_name}</td>
+                            <td>${cours.credits}</td>
+                        `;
+                        courseTableBody.appendChild(tr);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching courses:', error);
+                });
+        
+        //document.addEventListener('DOMContentLoaded', () => {
+            fetch('/instructors')
+                .then(respons => respons.json())
+                .then(instructors => {
+                    const coTableBody = document.querySelector('#instr tbody');
+                    instructors.forEach(instructor => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${instructor.ID}</td>
+                            <td>${instructor.name}</td>
+                            <td>${instructor.dept_name}</td>
+                            <td>${instructor.salary}</td>
+                        `;
+                        coTableBody.appendChild(tr);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching courses:', error);
+                });
+        });
+    </script>
+</body>
+</html>
